@@ -65,6 +65,10 @@ DATABASE_USER="NOMBRE_USUARIO_POSTGRES"
 DATABASE_PASSWORD="PASSWORD"
 DATABASE_HOST="HOST || localhost"
   ```
+## Inicialización de base de datos
+  ```
+  flask init-db
+  ```
 ## Ejecución de aplicación
 
 6. Para iniciar la aplicación, ejecute el siguiente comando:
