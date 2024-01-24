@@ -11,7 +11,7 @@ const SearchCompany = () => {
 
   const handleSubmit = async (e) => {
     try {
-      const apiKey = 'gFq1YqiQIiWILi7TnRxQvJ57WrhobN__';
+      const apiKey = import.meta.env.VITE_POLYGON_API_KEY;
       const apiUrl = `https://api.polygon.io/v3/reference/tickers?search=${e.search}&limit=15&active=true&apiKey=${apiKey}`;
       const response = await axios.get(apiUrl);
       const results = response.data.results;

@@ -28,7 +28,7 @@ const StockChart = () => {
           return;
         }
 
-        const apiKey = 'gFq1YqiQIiWILi7TnRxQvJ57WrhobN__';
+        const apiKey = import.meta.env.VITE_POLYGON_API_KEY;
 
         const apiUrl = `https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/day/2024-01-01/2024-01-31?apiKey=${apiKey}`;
 
