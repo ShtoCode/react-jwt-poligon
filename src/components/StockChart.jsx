@@ -60,7 +60,7 @@ const StockChart = () => {
         if (error.response && error.response.status === 429) {
           setError('Demasiadas solicitudes. Por favor, espere un momento antes de intentar nuevamente.');
         }
-        console.error('Error fetching data:', error);
+        setError('Error al obtener los datos. Por favor, intenta de nuevo.');         
       }
     };
 
@@ -102,8 +102,7 @@ const StockChart = () => {
             const low = parsed.low;
             const volume = parsed.volume;
 
-            const title = getTitleForValue(context.dataset.label);
-            return `${title}: Open: ${open}, Close: ${close}, High: ${high}, Low: ${low}, Volume: ${volume}`;
+            return `Open: ${open}, Close: ${close}, High: ${high}, Low: ${low}, Volume: ${volume}`;
           },
         }
       }
@@ -113,7 +112,7 @@ const StockChart = () => {
   };
 
   return (
-    <div className='w-5/6'>
+    <div className='w-full'>
       {error && (
 <div className="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
   <svg className="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -145,7 +144,7 @@ const StockChart = () => {
           />
         </div>
       ) : (
-        <h2 className='text-center text-2xl text-gray-600 mt-12 bg-gray-300 p-[100px]'>Debes seleccionar un Ticker</h2>
+        <h2 className='text-center text-2xl text-gray-600 mt-12 bg-gray-300 p-[100px] h-full'>Debes seleccionar un Ticker</h2>
       )}
     </div >
   );
