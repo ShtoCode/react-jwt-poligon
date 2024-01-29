@@ -42,20 +42,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
- const handleLoginResponse = (response, data) => {
-  if (response.status === 200) {
-    setAuthTokens(data);
-    if (typeof data.access === 'string') {
-      setUser(jwtDecode(data.access));
+  const handleLoginResponse = (response, data) => {
+    if (response.status === 200) {
+      setAuthTokens(data);
+      if (typeof data.access === 'string') {
+        setUser(jwtDecode(data.access));
+      }
+      localStorage.setItem("authTokens", JSON.stringify(data));
+      navigate("/");
+    } else {
+      alert("Something went wrong :(");
     }
-    localStorage.setItem("authTokens", JSON.stringify(data));
-    navigate("/");
-  } else {
-    alert("Something went wrong :(");
-  }
-};
+  };
 
- const registerUser = async (e) => {
+  const registerUser = async (e) => {
     try {
       const response = await createUserRequest(e.target);
       const data = await response.data;
@@ -71,12 +71,19 @@ export const AuthProvider = ({ children }) => {
   };
 
   const handleRegisterResponse = (response, data) => {
-    if (response.status === 201) {
-      navigate("/login");
+    if (response.status === 200) {
+      setAuthTokens(data);
+      if (typeof data.access === 'string') {
+        setUser(jwtDecode(data.access));
+      }
+      localStorage.setItem("authTokens", JSON.stringify(data));
+      navigate("/");
     } else {
-      alert("Registration failed. Please try again.");
+      alert("Something went wrong :(");
     }
   };
+
+
   const logoutUser = () => {
     setAuthTokens(null);
     setUser(null);

@@ -13,7 +13,6 @@ const StockChart = () => {
   const [error, setError] = useState(null);
   const chartRef = useRef();
   const { symbol } = useContext(StockContext);
-  console.log(`Symbol: ${symbol}`);
 
   const clearError = () => {
     setError(null);
@@ -24,7 +23,6 @@ const StockChart = () => {
       try {
         clearError();
         if (symbol === null) {
-          console.log('Symbol is undefined. No se realizará la llamada a la API.');
           return;
         }
 
@@ -60,7 +58,7 @@ const StockChart = () => {
         if (error.response && error.response.status === 429) {
           setError('Demasiadas solicitudes. Por favor, espere un momento antes de intentar nuevamente.');
         }
-        setError('Error al obtener los datos. Por favor, intenta de nuevo.');         
+        setError('Ha ocurrido un error al obtener los datos. Por favor, intenta de nuevo.');
       }
     };
 
@@ -94,16 +92,6 @@ const StockChart = () => {
     plugins: {
       tooltips: {
         callbacks: {
-          label: (context) => {
-            const { parsed } = context.dataset.data[context.dataIndex];
-            const open = parsed.open;
-            const close = parsed.close;
-            const high = parsed.high;
-            const low = parsed.low;
-            const volume = parsed.volume;
-
-            return `Open: ${open}, Close: ${close}, High: ${high}, Low: ${low}, Volume: ${volume}`;
-          },
         }
       }
     },
@@ -114,15 +102,15 @@ const StockChart = () => {
   return (
     <div className='w-full'>
       {error && (
-<div className="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-  <svg className="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-  </svg>
-  <span className="sr-only">Info</span>
-  <div>
-    <span className="font-medium">Error!</span> {error}
-  </div>
-</div>
+        <div className="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+          <svg className="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+          </svg>
+          <span className="sr-only">Info</span>
+          <div>
+            <span className="font-medium">Error!</span> {error}
+          </div>
+        </div>
       )}
       {symbol !== null && !error ? (
         <div className='h-full'>

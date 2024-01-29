@@ -21,5 +21,5 @@ export const createUserRequest = async (user) => {
         headers: {
             'Content-Type': 'application/json'
         }
-    })
-}
+    });
+};

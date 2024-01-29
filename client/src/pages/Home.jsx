@@ -5,14 +5,16 @@ import Navbar from '../components/Navbar';
 
 const Home = () => {
   return (
-    <StockProvider>
-    <Navbar />
-      <SearchCompany />
-      <div className='flex'>
-        <StockCharts />
+    <>
+      <Navbar />
+      <StockProvider>
+        <SearchCompany />
+        <div className='flex'>
+          <StockCharts />
 
-      </div>
-    </StockProvider>
+        </div>
+      </StockProvider>
+    </>
   )
 }
 

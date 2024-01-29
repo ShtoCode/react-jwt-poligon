@@ -85,8 +85,9 @@ DATABASE_HOST="HOST || localhost"
 
 ## Configuración del Entorno de Desarrollo de frontend
 
-1. En la carpeta raiz del repositorio instale las dependencias con NPM:
+1. En la carpeta de client instale las dependencias con NPM:
    ```bash
+   cd client
    npm install
 
 2. Configure el .env del cliente para utilizar la api de Polygon (https://polygon.io/docs/stocks):

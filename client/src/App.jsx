@@ -11,37 +11,35 @@ import Register from './pages/Register'
 function App() {
   return (
     <Router>
-
-
       <Routes>
         <Route path="/login" element={
-        <AuthProvider>
-        <Login />
-        </AuthProvider>
+          <AuthProvider>
+            <Login />
+          </AuthProvider>
         } />
         <Route path="/register" element={
-        <AuthProvider>
-        <Register />
-        </AuthProvider>
+          <AuthProvider>
+            <Register />
+          </AuthProvider>
         } />
         <Route path="/" element={
           <AuthProvider>
-          <PrivateRoute>
-            <Home />
-          </PrivateRoute>
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
           </AuthProvider>
         } />
         <Route path="/about" element={
-        <AuthProvider>
-        <PrivateRoute>
-          <About />
-        </PrivateRoute>
-        </AuthProvider>
+          <AuthProvider>
+            <PrivateRoute>
+              <About />
+            </PrivateRoute>
+          </AuthProvider>
         } />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
-    
+
   )
 }
 
