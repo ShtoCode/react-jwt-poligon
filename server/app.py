@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, make_response, session
+from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 import jwt
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -23,6 +23,7 @@ app.config.from_mapping(
 swagger = Swagger(app)
 db.init_app(app)
 
+
 def create_jwt(user, email):
     """Create JWT token"""
     token = jwt.encode({
@@ -41,6 +42,8 @@ def create_refresh_token(user, email):
         'email': email,
     }, app.config['SECRET_KEY'], algorithm='HS256')
     return refresh_token
+
+
 @app.route('/auth/register', methods=['POST'])
 def register():
     """
@@ -76,15 +79,26 @@ def register():
     nombre = request.json['nombre']
     email = request.json['email']
     password = request.json['password']
+    error = None
     db, c = get_db()
-    c.execute(
-        "INSERT INTO usuario (nombre, email, password) VALUES (%s, %s, %s)", 
-        (nombre, email, generate_password_hash(password))
-    )
-    db.commit()
-    token = create_jwt(nombre, email)
-    refresh_token = create_refresh_token(nombre, email)
-    return make_response(jsonify({'access': token, 'refresh': refresh_token}), 200)
+
+    if not nombre or not email or not password:
+        return make_response(jsonify({'error': 'All fields are required'}), 401)
+
+    c.execute('SELECT * FROM usuario WHERE email = %s', (email,))
+    user = c.fetchone()
+    if user is not None:
+        return make_response(jsonify({'error': 'Email already in use'}), 401)
+
+    if error is None:
+        c.execute(
+            "INSERT INTO usuario (nombre, email, password) VALUES (%s, %s, %s)",
+            (nombre, email, generate_password_hash(password))
+        )
+        db.commit()
+        token = create_jwt(nombre, email)
+        refresh_token = create_refresh_token(nombre, email)
+        return make_response(jsonify({'access': token, 'refresh': refresh_token}), 200)
 
 
 @app.route('/auth/login', methods=['POST'])
@@ -130,7 +144,8 @@ def login():
         refresh_token = create_refresh_token(user['nombre'], user['email'])
         return make_response(jsonify({'access': token, 'refresh': refresh_token}), 200)
     else:
-        return make_response(jsonify({'message': 'Invalid credentials'}), 401)
+        return make_response(jsonify({'error': 'Invalid credentials'}), 401)
+
 
 @app.route('/auth/refresh', methods=['POST'])
 def refresh():
@@ -139,36 +154,43 @@ def refresh():
     ---
     parameters:
       - in: body
-        name: Token
-        description: Current access token.
+        name: refresh
+        description: Current refresh token.
         required: true
         schema:
           type: object
           properties:
-            token:
+            refresh:
               type: string
-              description: Current access token.
     responses:
       200:
-        description: Obtiene un nuevo token de acceso.
+        description: Obtiene un nuevo token de acceso y un nuevo token de refresco.
         schema:
+          type: object
           properties:
             access_token:
+              type: string
+            refresh_token:
               type: string
       401:
         description: Token expirado o incorrecto.
     """
     refresh_token = request.json.get('refresh')
     try:
-        data = jwt.decode(refresh_token, app.config['SECRET_KEY'], algorithms=['HS256'])
+        data = jwt.decode(
+            refresh_token, app.config['SECRET_KEY'], algorithms=['HS256'])
+
         user = data['user']
         email = data['email']
         new_access_token = create_jwt(user, email)
-        return make_response(jsonify({'access': new_access_token}), 200)
+        new_refresh_token = create_refresh_token(
+            user, email)
+        return make_response(jsonify({'access': new_access_token, 'refresh': new_refresh_token}), 200)
     except jwt.ExpiredSignatureError:
         return make_response(jsonify({'error': 'Refresh token has expired'}), 401)
     except jwt.InvalidTokenError:
         return make_response(jsonify({'error': 'Invalid refresh token'}), 401)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

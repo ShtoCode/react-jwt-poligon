@@ -28,7 +28,16 @@ const StockChart = () => {
 
         const apiKey = import.meta.env.VITE_POLYGON_API_KEY;
 
-        const apiUrl = `https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/day/2024-01-01/2024-01-31?apiKey=${apiKey}`;
+        const today = new Date();
+        const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+
+        const formattedFirstDay = `${firstDayOfMonth.getFullYear()}-${(firstDayOfMonth.getMonth() + 1).toString().padStart(2, '0')}-${firstDayOfMonth.getDate().toString().padStart(2, '0')}`;
+        const formattedLastDay = `${lastDayOfMonth.getFullYear()}-${(lastDayOfMonth.getMonth() + 1).toString().padStart(2, '0')}-${lastDayOfMonth.getDate().toString().padStart(2, '0')}`;
+
+
+        const apiUrl = `https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/day/${formattedFirstDay}/${formattedLastDay}?apiKey=${apiKey}`;
 
         const response = await axios.get(apiUrl);
 

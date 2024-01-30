@@ -9,13 +9,12 @@ export const userRequest = async (user) => {
 }
 
 export const userUpdateRequest = async (token) => {
-    return await axios.post('http://localhost:5000/auth/refresh', { token }, {
+    return await axios.post('http://localhost:5000/auth/refresh', { refresh: token }, {
         headers: {
             'Content-Type': 'application/json'
         }
     })
 }
-
 export const createUserRequest = async (user) => {
     return await axios.post('http://localhost:5000/auth/register', user, {
         headers: {

@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { userRequest, userUpdateRequest, createUserRequest } from "../api/auth.api";
+import Swal from "sweetalert2";
 
 const AuthContext = createContext();
 
@@ -32,10 +33,15 @@ export const AuthProvider = ({ children }) => {
       const response = await userRequest(e.target);
       const data = await response.data;
       handleLoginResponse(response, data);
-      console.log(data);
     } catch (error) {
       if (error.response && error.response.data) {
-        console.log(error.response.data);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: error.response.data.error,
+          confirmButtonText: 'Ok',
+          confirmButtonColor: 'blue',
+        })
       } else {
         console.log(error);
       }
@@ -60,10 +66,15 @@ export const AuthProvider = ({ children }) => {
       const response = await createUserRequest(e.target);
       const data = await response.data;
       handleRegisterResponse(response, data);
-      console.log(data);
     } catch (error) {
       if (error.response && error.response.data) {
-        console.log(error.response.data);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: error.response.data.error,
+          confirmButtonText: 'Ok',
+          confirmButtonColor: 'blue',
+        })
       } else {
         console.log(error);
       }
@@ -126,12 +137,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    let tenMinutes = 1000 * 60 * 10
+    let twentyThreeHours = 1000 * 60 * 60 * 23;
     const interval = setInterval(() => {
       if (authTokens) {
         updateToken(authTokens);
       }
-    }, tenMinutes);
+    }, twentyThreeHours);
     return () => clearInterval(interval);
   }, [authTokens, loading]);
 

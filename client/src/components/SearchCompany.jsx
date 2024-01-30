@@ -36,7 +36,7 @@ const SearchCompany = () => {
     >
       <div className='flex mx-auto bg-gray-200 flex-col w-2/3 mt-12'>
         <Form className='flex flex-col mb-4'>
-          <label htmlFor="search" className="text-center text-xl mt-4">Buscar Compañía</label>
+          <label htmlFor="search" className="text-center text-xl mt-4 text-blue-700">Buscar Compañía</label>
           <Field
             type="text"
             name="search"
