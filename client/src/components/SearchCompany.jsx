@@ -55,6 +55,7 @@ const SearchCompany = () => {
               </div>
             </li>
           ))}
+          {symbol.length === 0 && <p className='text-center text-xl text-red-700'>No se encontraron resultados.</p>}
         </ul>
       </div>
     </Formik>)
